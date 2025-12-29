@@ -35,12 +35,11 @@ public class ZimSwitchController {
     }
 
     /**
-     * Triggers an 1804 Echo Test (Network Management).
-     * Optional JSON body can override fields (e.g. {"70":"301"}).
+     * Triggers an Echo Test. Defaults to MTI 0800 and F70=301.
+     * You can override via JSON body, e.g. {"mti":"1804", "70":"303"}.
      */
     @PostMapping("/echo")
     public ResponseEntity<?> echo(@RequestBody(required = false) Map<String, String> body) throws Exception {
         return ResponseEntity.ok(clientService.sendEcho(body));
     }
 }
-

@@ -32,6 +32,7 @@ public class IsoServerConfig {
 
     @Bean
     public ISOServer isoServer(ISOPackager packager, PosIsoRequestListener listener) throws Exception {
+        System.out.println("Listening on port " + listenPort);
         // Build server-side NAC channel with TPDU header
         byte[] header = ISOUtil.hex2byte(headerHex);
         ServerChannel srvChannel = new NACChannel(packager, header);
@@ -39,6 +40,7 @@ public class IsoServerConfig {
         // jPOS logger to stdout for ISO traffic
         Logger jposLogger = new Logger();
         jposLogger.addListener(new SimpleLogListener(System.out));
+        // Enable ISO in/out dumps at channel level
        // srvChannel.setLogger(jposLogger, "zimswitch-acceptor-nac");
 
         ISOServer server = new ISOServer(listenPort, srvChannel, new ThreadPool(5, 50));

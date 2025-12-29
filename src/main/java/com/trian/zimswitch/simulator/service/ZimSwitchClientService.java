@@ -40,7 +40,7 @@ public class ZimSwitchClientService {
     }
 
     public Map<String, Object> sendEcho(Map<String, String> overrides) throws Exception {
-        ISOMsg req = builder.build1804(orDefault(overrides));
+        ISOMsg req = builder.buildEcho(orDefault(overrides));
         ISOMsg resp = sendAndReceive(req);
         validateResponse(req, resp);
         return IsoResponseMapper.toJson(resp);

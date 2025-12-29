@@ -42,10 +42,15 @@ public class IsoMessageBuilder {
         return baseFinancial("1400", overrides);
     }
 
-    public ISOMsg build1804(Map<String, String> overrides) throws ISOException {
+    /**
+     * Build an echo-test request. MTI defaults to 0800 but can be overridden by overrides["mti"], e.g., 1804.
+     * Field 70 defaults to 301 but can be overridden via overrides["70"].
+     */
+    public ISOMsg buildEcho(Map<String, String> overrides) throws ISOException {
         ISOMsg m = new ISOMsg();
         m.setPackager(packager);
-        m.setMTI("1804");
+        String mti = overrides.getOrDefault("mti", "0800");
+        m.setMTI(mti);
 
         String f7 = ISODate.formatDate(new Date(), "MMddHHmmss");
 
@@ -62,7 +67,7 @@ public class IsoMessageBuilder {
         m.set(13, overrides.getOrDefault("13", IsoUtil.localDate()));
 
         // Network Management Information Code
-        // 301 = Echo Test
+        // Default to 301 (switch-specific); use 303 or other as required by peer
         m.set(70, overrides.getOrDefault("70", "301"));
 
         return m;

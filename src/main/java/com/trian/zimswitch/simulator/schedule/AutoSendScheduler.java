@@ -33,15 +33,15 @@ public class AutoSendScheduler {
     }
 
     // Send a financial request every 15 seconds (fixed rate)
-    @Scheduled(initialDelay = 15_000L, fixedRate = 15_000L)
-    public void sendFinancialPeriodically() {
-        try {
-            Map<String, Object> resp = clientService.sendFinancial(new HashMap<>());
-            Map<?, ?> fields = (Map<?, ?>) resp.get("fields");
-            Object rc = fields != null ? fields.get("39") : null;
-            log.info("Auto FINANCIAL sent -> RC={}", rc);
-        } catch (Exception e) {
-            log.warn("Auto FINANCIAL failed: {}", e.getMessage());
-        }
-    }
+//    @Scheduled(initialDelay = 15_000L, fixedRate = 15_000L)
+//    public void sendFinancialPeriodically() {
+//        try {
+//            Map<String, Object> resp = clientService.sendFinancial(new HashMap<>());
+//            Map<?, ?> fields = (Map<?, ?>) resp.get("fields");
+//            Object rc = fields != null ? fields.get("39") : null;
+//            log.info("Auto FINANCIAL sent -> RC={}", rc);
+//        } catch (Exception e) {
+//            log.warn("Auto FINANCIAL failed: {}", e.getMessage());
+//        }
+//    }
 }

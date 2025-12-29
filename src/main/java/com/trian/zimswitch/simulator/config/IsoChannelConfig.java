@@ -2,6 +2,7 @@ package com.trian.zimswitch.simulator.config;
 
 import org.jpos.iso.ISOChannel;
 import org.jpos.iso.ISOPackager;
+import org.jpos.iso.ISOUtil;
 import org.jpos.iso.channel.NACChannel;
 import org.jpos.iso.packager.GenericPackager;
 import org.slf4j.Logger;
@@ -29,6 +30,9 @@ public class IsoChannelConfig {
 
     @Value("${gateway.timeout:5000}")
     private int timeoutMs;
+
+    @Value("${gateway.header:42}")
+    private String headerHex;
 
     @Bean
     public ISOPackager isoPackager() throws Exception {
@@ -59,8 +63,14 @@ public class IsoChannelConfig {
 
     @Bean
     public ISOChannel isoChannel(ISOPackager packager) throws Exception {
-        // Use constructor available in this jPOS version (no TPDU header)
-        NACChannel channel = new NACChannel(host, port, packager, org.jpos.iso.ISOUtil.hex2byte("42"));
+        // Build client NAC channel with configurable TPDU/header (hex string)
+        NACChannel channel;
+        if (headerHex == null || headerHex.isBlank() || headerHex.equalsIgnoreCase("none") || headerHex.equals("-")) {
+            channel = new NACChannel(host,port,packager, ISOUtil.hex2byte("00"));
+        } else {
+            byte[] header = org.jpos.iso.ISOUtil.hex2byte(headerHex);
+            channel = new NACChannel(host, port, packager, header);
+        }
         channel.setTimeout(timeoutMs);
 
         // Enable jPOS ISO send/receive logging
